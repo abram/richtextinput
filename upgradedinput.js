@@ -48,9 +48,10 @@ richtext.UpgradedInput.prototype.render = function() {
   this.containerElement.style.position = 'absolute';
 
   this.containerElement.style.top =
-      this.inputElement.offsetTop + nativePadding;
+      this.inputElement.offsetTop + nativePadding + 'px';
   this.containerElement.style.left =
-      this.inputElement.offsetLeft + nativePadding;
+      this.inputElement.offsetLeft + nativePadding + 'px';
+  richtext.log('positioned using', this.inputElement.offsetTop, nativePadding)
 
   this.inputElement.style.color = richtext.UpgradedInput.getCurrentStyles(
     this.inputElement, ['backgroundColor']).backgroundColor;
@@ -63,6 +64,7 @@ richtext.UpgradedInput.getNativePadding = function(tagName) {
   testElement.style.fontFamily = 'monospace';
   testElement.style.fontSize = '10px';
   testElement.style.position = 'absolute';
+  testElement.style.lineHeight = '10px';
   //testElement.style.top = '-100px';
   testElement.value = 'xxxxx12345';
   document.body.appendChild(testElement);
@@ -70,6 +72,7 @@ richtext.UpgradedInput.getNativePadding = function(tagName) {
   var testElement2 = document.createElement('div');
   testElement2.style.fontFamily = 'monospace';
   testElement2.style.fontSize = '10px';
+  testElement2.style.lineHeight = '10px';
   testElement2.style.position = 'absolute';
   testElement2.innerHTML = 'xxxxx12345';
   document.body.appendChild(testElement2);
