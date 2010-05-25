@@ -1,0 +1,93 @@
+<html>
+<head>
+  <script src="richtext.js"></script>
+  <script src="charrange.js"></script>
+  <script src="formatter.js"></script>
+  <script src="input.js"></script>
+  <script src="upgradedinput.js"></script>
+
+  <script>
+
+    function setupRichText(form, opt_upgrade) {
+      var inputs = form.getElementsByTagName('input');
+      for (var i = 0; i < inputs.length; i++) {
+        var input = inputs[i];
+        if (input.type == 'text') {
+	  if (opt_upgrade) {
+	    var rt = new richtext.UpgradedInput(input);
+          } else {
+	    var rt = new richtext.Input();
+	    rt.setText(input.value);
+            input.parentNode.replaceChild(rt.containerElement, input);
+          }
+	  var formatter = new richtext.RegExpFormatter();
+          if (input.name == 'phone') {
+            formatter.addMatcher(/[0-9]+/, 'font-weight: bold');
+	    formatter.addMatcher(/[-\(\) ]+/, 'color: #aaa');
+	    formatter.addMatcher(/[^0-9-\(\) ]+/, 'color: red');
+	  } else if (input.name == 'url') {
+            formatter.addMatcher(/[a-z]+:\/\/+/, 'color: #aaa');
+          } else if (input.name == 'tags') {
+            formatter.addMatcher(/\S+/, '', 'tag');
+	  }
+	  rt.formatter = formatter;
+          rt.format();
+        }
+      }
+    }
+    
+    window.onload = function() {
+      setupRichText(document.getElementById('replaced'));
+      setupRichText(document.getElementById('upgraded'), true);
+    }
+  </script>
+  <style>
+    .tag {
+      color: white;
+      background-color: #0088ef;
+      font-family: verdana;
+      padding: 2px 3px 2px 6px;
+      font-size: 12px;
+      font-weight: bold;
+      border-radius: 9px 2px 2px 9px;
+      -moz-border-radius: 9px 2px 2px 9px;
+    }
+    input, .richtext {
+      font-size: 12pt;
+    }
+    .richtext {
+      border: 1px inset #aaa;
+      padding: 3px;
+    }
+    form {
+      width: 300px;
+      float: left;
+    }
+  </style>
+</head>
+<body>
+  <form id="standard">
+    <h2>Standard inputs:</h2>
+    Phone number: <input name="phone" /><br />
+    Url: <input name="url" /><br />
+    Tags: <input name="tags" /><br />
+  </form>
+
+  <form id="replaced">
+    <h2>Replaced inputs:</h2>
+    Phone number: <input name="phone" /><br />
+    Url: <input name="url" /><br />
+    Tags: <input name="tags" /><br />
+  </form>
+
+  <form id="upgraded">
+    <h2>Upgraded inputs</h2>
+    Phone number: <input name="phone" /><br />
+    Url: <input name="url" /><br />
+    Tags: <input name="tags" /><br />
+  </form>
+
+  <br style="clear: both">
+<!--  <a href="http://fettig.net/">A link</a> (Clicking this link and then hitting back should result in preserved form values)-->
+</body>
+</html>
