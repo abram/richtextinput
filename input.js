@@ -23,7 +23,7 @@ richtext.Input.prototype.render = function() {
   this.containerElement.appendChild(this.editableElement);
   this.editableElement.contentEditable = true;
 
-  this.createInputElement_()
+  this.createInputElement_();
 
   this.editableElement.onfocus = function() {
     // select all text?
@@ -43,6 +43,7 @@ richtext.Input.prototype.createInputElement_ = function() {
   var inputElement = document.createElement('input');
   inputElement.type = 'hidden';
   this.containerElement.appendChild(inputElement);
+  this.inputElement = inputElement;
 };
 
 

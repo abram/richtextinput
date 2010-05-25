@@ -28,7 +28,7 @@
 	  } else if (input.name == 'url') {
             formatter.addMatcher(/[a-z]+:\/\/+/, 'color: #aaa');
           } else if (input.name == 'tags') {
-            formatter.addMatcher(/\S+/, '', 'tag');
+	    formatter.addMatcher(/("[^"]+"|\S+)/, '', 'tag');
 	  }
 	  rt.formatter = formatter;
           rt.format();
