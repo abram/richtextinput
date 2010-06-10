@@ -33,12 +33,29 @@ richtext.CharRange.prototype.buildNodeList_ = function(element, nodeList) {
   }
 };
 
+richtext.CharRange.prototype.isInContainer_ = function(child) {
+    do {
+	if (child == this.containerElement) {
+	    return true;
+	}
+    } while (child = child.parentNode);
+    return false;
+};
+
+richtext.CharRange.prototype.containsRange_ = function(range) {
+    return this.isInContainer_(range.startContainer) &&
+        this.isInContainer_(range.endContainer);
+};
+
 richtext.CharRange.prototype.getSelectionIndexes = function() { 
   var selection = window.getSelection();
-  if (!selection.rangeCount) {
+  var range;
+  if (selection.rangeCount) {
+      range = selection.getRangeAt(0);
+  }
+  if (!range || !this.containsRange_(range)) {
     return [null, null];
   }
-  var range = selection.getRangeAt(0);
 
   var startContainerStartIndex = this.getNodeStartIndex(range.startContainer) || 0;
   var endContainerStartIndex = this.getNodeStartIndex(range.endContainer) || 0;
@@ -48,7 +65,6 @@ richtext.CharRange.prototype.getSelectionIndexes = function() {
 
 richtext.CharRange.prototype.setSelectionIndexes = function(startIndex,
 							    endIndex) {
-  richtext.log('set selection indexes', startIndex, endIndex);
   var startNode = this.nodes[startIndex];
   var endNode = this.nodes[endIndex];
   var startOffset = this.getNodeStartIndex(startNode);

@@ -33,7 +33,7 @@ richtext.Input.prototype.render = function() {
   this.editableElement.onkeyup = function () {
     var value = self.getText();
     if (value != self.inputElement.value) {
-      self.inputElement.value = self.getText();
+      self.inputElement.value = value;
       self.format();
     }
   };
@@ -48,8 +48,9 @@ richtext.Input.prototype.createInputElement_ = function() {
 
 
 richtext.Input.prototype.getText = function() {
-  return typeof this.editableElement.innerText != 'undefined' ?
+  var text = typeof this.editableElement.innerText != 'undefined' ?
       this.editableElement.innerText : this.editableElement.textContent;
+  return text.replace('\n', '');
 };
 
 richtext.Input.prototype.setText = function(text) {
@@ -59,10 +60,14 @@ richtext.Input.prototype.setText = function(text) {
 
 
 richtext.Input.prototype.format = function() {
-  if (!this.formatter) { return; }
+  var text = this.getText();
   var currentSelection = this.charRange.getSelectionIndexes();
-  richtext.log("CURRENT SEL", currentSelection);
-  this.editableElement.innerHTML = this.formatter.format(this.getText());
+  if (text) {
+    if (!this.formatter) { return; }
+    this.editableElement.innerHTML = this.formatter.format(this.getText());
+  } else {
+    this.editableElement.innerHTML = '<br />';
+  }
   this.charRange.refresh();
   if (currentSelection[0] != null) {
     this.charRange.setSelectionIndexes.apply(this.charRange, currentSelection);
