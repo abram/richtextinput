@@ -46,12 +46,13 @@ richtext.UpgradedInput.prototype.render = function() {
   this.inputElement.tabIndex = "-1";
 
   this.containerElement.style.position = 'absolute';
+  var originalInputPosition = richtext.getAbsolutePosition(this.inputElement);
 
-  this.containerElement.style.top =
-      this.inputElement.offsetTop + nativePadding + 'px';
+  this.containerElement.style.top = 
+      originalInputPosition.top + nativePadding + 'px';
   this.containerElement.style.left =
-      this.inputElement.offsetLeft + nativePadding + 'px';
-  richtext.log('positioned using', this.inputElement.offsetTop, nativePadding)
+      originalInputPosition.left + nativePadding + 'px';
+  richtext.log('positioned using', originalInputPosition.top, originalInputPosition.left, nativePadding)
 
   this.inputElement.style.color = richtext.UpgradedInput.getCurrentStyles(
     this.inputElement, ['backgroundColor']).backgroundColor;

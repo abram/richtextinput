@@ -22,3 +22,24 @@ richtext.makeBorderBox = function(element) {
 richtext.makeInlineBlock = function(element) {
   element.style.display = 'inline-block';
 };
+
+/*
+ * Returns the element's position relative to the closest ancestor
+ * that has position: relative or position: absolute;
+ */
+richtext.getAbsolutePosition = function(element) {
+    var totalOffset = {left: element.offsetLeft, top: element.offsetTop};
+    do {
+	element = element.offsetParent;
+	var computedStyle = element.currentStyle ? element.currentStyle :
+	    document.defaultView.getComputedStyle(element, '');
+	if (computedStyle.position == 'absolute' ||
+	    computedStyle.position == 'relative') {
+	    break;
+	}
+	totalOffset.left += element.offsetLeft;
+	totalOffset.top += element.offsetTop;
+
+    } while (element.offsetParent);
+    return totalOffset;
+};
