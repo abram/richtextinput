@@ -4,7 +4,12 @@ richtext.DEBUG = true;
 
 richtext.log = function() {
   if (richtext.DEBUG && window.console && window.console.log) {
-    window.console.log(arguments);
+    if (window.console.log.apply) {
+      window.console.log.apply(window.console, arguments);
+    } else { // IE 8
+      window.console.log(
+	Array.prototype.join.apply(arguments, [' ']));
+    }
   }
 };
 
