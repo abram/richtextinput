@@ -1,0 +1,6 @@
+Rich Text Input is a Javascript-enhanced input box with support for rich
+text formatting. It makes it possible for text inputs to provide unobtrusive,
+instant feedback about how the user's input will be interpreted. 
+
+Current release: 0.2 (dev snapshot, works pretty well in WebKit, Gecko, and IE)
+
