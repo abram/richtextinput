@@ -54,9 +54,32 @@ richtext.Input.prototype.getText = function() {
 };
 
 richtext.Input.prototype.setText = function(text) {
-  this.editableElement.innerHTML = '';
+  this.clear();
   this.editableElement.appendChild(document.createTextNode(text));
   this.charRange.refresh();
+};
+
+richtext.Input.prototype.setHTML = function(html) {
+  // setting innerHTML directly on IE causes "unknown runtime error" sometimes.
+  var tmpDiv = document.createElement('div');
+  tmpDiv.innerHTML = html;
+  this.clear();
+  while(tmpDiv.firstChild) {
+    this.editableElement.appendChild(tmpDiv.firstChild);
+  }
+};
+
+richtext.Input.prototype.clear = function(opt_includeEmptyContent) {
+  while (this.editableElement.lastChild) {
+    this.editableElement.removeChild(this.editableElement.lastChild);
+  }
+  if (opt_includeEmptyContent) {
+    if (document.selection) { // IE
+      this.editableElement.appendChild(document.createTextNode(''));
+    } else {
+      this.editableElement.appendChild(document.createElement('br'))
+    }
+  }
 };
 
 
@@ -65,9 +88,9 @@ richtext.Input.prototype.format = function() {
   var currentSelection = this.charRange.getSelectionIndexes();
   if (text) {
     if (!this.formatter) { return; }
-    this.editableElement.innerHTML = this.formatter.format(this.getText());
+    this.setHTML(this.formatter.format(this.getText()));
   } else {
-    this.editableElement.innerHTML = '<br />';
+    this.clear(true);
   }
   this.charRange.refresh();
   if (currentSelection[0] != null) {
