@@ -4,7 +4,7 @@ richtext.DEBUG = true;
 
 richtext.log = function() {
   if (richtext.DEBUG && window.console && window.console.log) {
-    window.console.log.apply(window.console, arguments);
+    window.console.log(arguments);
   }
 };
 
