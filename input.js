@@ -22,7 +22,7 @@ richtext.Input.prototype.render = function() {
 
   this.containerElement.appendChild(this.editableElement);
   this.editableElement.contentEditable = true;
-
+ 
   this.createInputElement_();
 
   this.editableElement.onfocus = function() {
@@ -48,7 +48,7 @@ richtext.Input.prototype.createInputElement_ = function() {
 
 
 richtext.Input.prototype.getText = function() {
-  var text = typeof this.editableElement.innerText != 'undefined' ?
+  var text = (typeof this.editableElement.innerText != 'undefined') ?
       this.editableElement.innerText : this.editableElement.textContent;
   return text.replace('\n', '');
 };
@@ -56,6 +56,7 @@ richtext.Input.prototype.getText = function() {
 richtext.Input.prototype.setText = function(text) {
   this.editableElement.innerHTML = '';
   this.editableElement.appendChild(document.createTextNode(text));
+  this.charRange.refresh();
 };
 
 
