@@ -101,7 +101,7 @@ richtext.UpgradedInput.getCurrentStyles = function(element, styleNames) {
 richtext.UpgradedInput.copyStyles = function(sourceElement, targetElement, styleNames) {
   var sourceValues = richtext.UpgradedInput.getCurrentStyles(sourceElement,
 							     styleNames);
-  for (styleName in sourceValues) {
+  for (var styleName in sourceValues) {
     targetElement.style[styleName] = sourceValues[styleName];
   }
 };
