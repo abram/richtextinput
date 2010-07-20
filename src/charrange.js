@@ -14,7 +14,6 @@ richtext.CharRange.prototype.refresh = function() {
   } else {
     this.nodes.push(this.nodes[this.nodes.length - 1]);
   }
-  richtext.log('refreshed char range', this.nodes);
 };
 
 richtext.CharRange.prototype.buildNodeList_ = function(element, nodeList) {
@@ -95,6 +94,14 @@ richtext.CharRange.prototype.containsRangeW3C_ = function(range) {
 
 richtext.CharRange.prototype.setSelectionIndexes = function(startIndex,
 							    endIndex) {
+   // If the selection would go past the end, move it back.
+  var adjustment = 0;
+  if (endIndex > this.nodes.length - 1) {
+    adjustment = endIndex - (this.nodes.length - 1);
+    endIndex = this.nodes.length - 1;
+  }
+  startIndex = Math.min(endIndex, Math.max(0, startIndex - adjustment));
+ 
   var startNode = this.nodes[startIndex];
   var endNode = this.nodes[endIndex];
   var startOffset = startIndex - this.getNodeStartIndex(startNode);

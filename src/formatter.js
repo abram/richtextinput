@@ -2,7 +2,7 @@ richtext.Formatter = function() {
 
 };
 
-richtext.Formatter.format = function(text) {
+richtext.Formatter.format = function(text, callback) {
   throw "Not implemented."
 };
 
@@ -21,11 +21,9 @@ richtext.RegExpFormatter.prototype.addMatcher = function(
 
 };
 
-richtext.RegExpFormatter.prototype.format = function(inputText) {
+richtext.RegExpFormatter.prototype.format = function(inputText, callback) {
 
   var outputHtml = '';
-
-  richtext.log('input:', inputText);
 
   while (inputText.length) {
     var nextMatch = null;
@@ -53,6 +51,5 @@ richtext.RegExpFormatter.prototype.format = function(inputText) {
     }
   }
 
-  richtext.log('output:', outputHtml);
-  return outputHtml;
-}
+  callback(outputHtml);
+};

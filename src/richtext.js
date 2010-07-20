@@ -13,6 +13,12 @@ richtext.log = function() {
   }
 };
 
+richtext.bind = function(func, context) {
+  return function() {
+    return func.apply(context, arguments);
+  };
+};
+    
 richtext.makeBorderBox = function(element) {
   // Set to border-box box sizing
   var boxSizingProps = ['boxSizing', 'mozBoxSizing', 'webkitBoxSizing', 'msBoxSizing'];

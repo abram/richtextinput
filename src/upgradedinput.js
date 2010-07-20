@@ -1,8 +1,5 @@
 
 richtext.UpgradedInput = function(inputElement) {
-  if (inputElement.type != 'text') {
-    throw "UpgradeInput can only upgrade text inputs";
-  }
   this.inputElement = inputElement;
   richtext.Input.call(this);
 }
@@ -24,13 +21,20 @@ richtext.UpgradedInput.prototype.render = function() {
 			    this.editableElement,
 			    richtext.UpgradedInput.TEXTINPUT_STYLES);
 
-  var nativePadding = richtext.UpgradedInput.getNativePadding(
-	this.inputElement.tagName);
+  var nativePadding = richtext.UpgradedInput.getNativePadding();
+
+  var paddingX = nativePadding;
+  var paddingY = nativePadding;
+
+  if (this.inputElement.type == 'search') {
+    console.log('search');
+    paddingX += 10;
+  }
 
   this.containerElement.style.width =
-      this.inputElement.clientWidth - (nativePadding * 2) + 'px';
+      this.inputElement.clientWidth - (paddingX * 2) + 'px';
   this.containerElement.style.height =
-      this.inputElement.clientHeight + 'px'; // (nativePadding * 2) + 'px';
+      this.inputElement.clientHeight + 'px'; // (paddingY * 2) + 'px';
 
   var self = this;
   this.inputElement.onfocus = function() { 
@@ -40,6 +44,7 @@ richtext.UpgradedInput.prototype.render = function() {
     self.editableElement.focus(); return false; 
   };
   this.inputElement.onmousedown = function() {
+    self.setText(self.inputElement.value);
     self.editableElement.focus(); return false; 
   };
   this.inputElement.unselectable = 'on';
@@ -49,10 +54,9 @@ richtext.UpgradedInput.prototype.render = function() {
   var originalInputPosition = richtext.getAbsolutePosition(this.inputElement);
 
   this.containerElement.style.top = 
-      originalInputPosition.top + nativePadding + 'px';
+      originalInputPosition.top + paddingY + 'px';
   this.containerElement.style.left =
-      originalInputPosition.left + nativePadding + 'px';
-  richtext.log('positioned using', originalInputPosition.top, originalInputPosition.left, nativePadding)
+      originalInputPosition.left + paddingX + 'px';
 
   this.inputElement.style.color = richtext.UpgradedInput.getCurrentStyles(
     this.inputElement, ['backgroundColor']).backgroundColor;
@@ -60,8 +64,8 @@ richtext.UpgradedInput.prototype.render = function() {
   this.setText(this.inputElement.value);
 };
 
-richtext.UpgradedInput.getNativePadding = function(tagName) {
-  var testElement = document.createElement(tagName);
+richtext.UpgradedInput.getNativePadding = function() {
+  var testElement = document.createElement('input');
   testElement.style.fontFamily = 'monospace';
   testElement.style.fontSize = '10px';
   testElement.style.position = 'absolute';
@@ -110,7 +114,6 @@ richtext.UpgradedInput.TEXTINPUT_STYLES = [
   'fontFamily',
   'fontWeight',
   'fontSize',
-  'color',
   'textDecoration',
   'letterSpacing',
   'lineHeight',

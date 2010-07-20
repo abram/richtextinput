@@ -1,10 +1,10 @@
 <html>
 <head>
-  <script src="richtext.js"></script>
-  <script src="charrange.js"></script>
-  <script src="formatter.js"></script>
-  <script src="input.js"></script>
-  <script src="upgradedinput.js"></script>
+  <script src="src/richtext.js"></script>
+  <script src="src/charrange.js"></script>
+  <script src="src/formatter.js"></script>
+  <script src="src/input.js"></script>
+  <script src="src/upgradedinput.js"></script>
 
   <script>
 
@@ -12,27 +12,25 @@
       var inputs = form.getElementsByTagName('input');
       for (var i = 0; i < inputs.length; i++) {
         var input = inputs[i];
-        if (input.type == 'text') {
-	  if (opt_upgrade) {
-	    var rt = new richtext.UpgradedInput(input);
-          } else {
-	    var rt = new richtext.Input();
-	    rt.setText(input.value);
-            input.parentNode.replaceChild(rt.containerElement, input);
-          }
-	  var formatter = new richtext.RegExpFormatter();
-          if (input.name == 'phone') {
-            formatter.addMatcher(/[0-9]+/, 'font-weight: bold');
-	    formatter.addMatcher(/[-\(\) ]+/, 'color: #aaa');
-	    formatter.addMatcher(/[^0-9-\(\) ]+/, 'color: red');
-	  } else if (input.name == 'url') {
-            formatter.addMatcher(/[a-z]+:\/\/+/, 'color: #aaa');
-          } else if (input.name == 'tags') {
-	    formatter.addMatcher(/("[^"]+"|\S+)/, '', 'tag');
-	  }
-	  rt.formatter = formatter;
-          rt.format();
+	if (opt_upgrade) {
+          var rt = new richtext.UpgradedInput(input);
+        } else {
+	  var rt = new richtext.Input();
+	  rt.setText(input.value);
+          input.parentNode.replaceChild(rt.containerElement, input);
         }
+	var formatter = new richtext.RegExpFormatter();
+        if (input.name == 'phone') {
+          formatter.addMatcher(/[0-9]+/, 'font-weight: bold');
+	  formatter.addMatcher(/[-\(\) ]+/, 'color: #aaa');
+	  formatter.addMatcher(/[^0-9-\(\) ]+/, 'color: red');
+	} else if (input.name == 'url') {
+          formatter.addMatcher(/[a-z]+:\/\/+/, 'color: #aaa');
+        } else if (input.name == 'tags') {
+	  formatter.addMatcher(/("[^"]+"|\S+)/, '', 'tag');
+	}
+	rt.formatter = formatter;
+        rt.format();
       }
     }
     
@@ -55,9 +53,13 @@
     input, .richtext {
       font-size: 12pt;
     }
-    .richtext {
+    .richtext-container {
       border: 1px inset #aaa;
       padding: 3px;
+    }
+    .richtext:focus {
+      border: none;
+      outline: none;
     }
     form {
       width: 300px;
