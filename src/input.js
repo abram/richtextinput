@@ -46,8 +46,8 @@ richtext.Input.prototype.render = function() {
     }
   };
 
-  this.editableElement.onkeypress = function(e) {
-    if (e.keyCode == 13) { // Enter
+  this.editableElement.onkeydown = function(e) {
+    if ((e | window.event).keyCode == 13) { // Enter
       self.onenterkey();
       e.preventDefault();
     }
